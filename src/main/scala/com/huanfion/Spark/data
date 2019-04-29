@@ -1,0 +1,12 @@
+2019-02-01 00:00:01.752 [http-nio-80-exec-1894] INFO  data_log -ip=115.60.183.78&source=TCL&deviceid=6431f2287dfa2c934e9df05bb0b39c133f3e7f1d&clienttype=TCL-CN-RT95-E5800A-UDM&huanid=546250600&userid=cd57bed7e53c7a2f945ebb6482467f393b0347ad&macline=3C:59:1E:00:76:24&macwifi=0c:91:60:76:bb:38&lcd=&devicesoftwareversion=V8-RT95016-LF1V161&projectid=121&modelname=&flash=717 MB/1.48 GB&netstats=WIFI&dnum=440874744&netspeed=2171.0KB&software=UsageStats&version=2.9.6&data=com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=429000}
+com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=436000}
+com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=456000}
+com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=494000}
+com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=771000}
+com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=1354000}
+com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=1654000}
+com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=1952000}
+com.tcl.TVBasicBehavior,{1=2019-01-31 00:05:35,2=2019-01-31 00:38:36}
+com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=2245000}
+com.qiyi.video,{1=2019-01-31 00:05:37,2=2019-01-31 00:40:22,3=2}
+com.tcl.thirdAppPlayBehavior,{1=qiyi,2=587133,3=武松,4=2620,5=2245000}
