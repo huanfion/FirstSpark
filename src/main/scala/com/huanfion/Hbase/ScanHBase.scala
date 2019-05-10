@@ -1,14 +1,15 @@
 package com.huanfion.Hbase
 
+import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.hbase.HBaseConfiguration
 import org.apache.hadoop.hbase.client.Scan
 import org.apache.hadoop.hbase.mapreduce.TableInputFormat
-import org.apache.hadoop.hbase.protobuf.ProtobufUtil
-import org.apache.hadoop.hbase.protobuf.generated.ClientProtos
 import org.apache.hadoop.hbase.util._
 import org.apache.spark._
 import org.apache.hadoop.hbase.io._
 import org.apache.hadoop.hbase.client._
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{SQLContext, SparkSession}
 
 object ScanHBase {
@@ -41,25 +42,29 @@ object ScanHBase {
     }};
   }*/
   def main(args:Array[String]): Unit ={
-
+    Logger.getLogger("org").setLevel(Level.TRACE)
     // 本地模式运行,便于测试
-    val sparkConf = new SparkConf().setAppName("HBaseTest")
-
+    val sparkConf = new SparkConf().setAppName("HBaseTest").setMaster("local[*]")
+    val ZOOK_HOSTIP = Array("128", "130", "132").map("192.168.106." + _)
+    val ZOOKEEPER_QUORUM = ZOOK_HOSTIP.map(_ + ":2181").mkString(",")
     // 创建hbase configuration
-    val hBaseConf = HBaseConfiguration.create()
+    val hBaseConf:Configuration = HBaseConfiguration.create()
     hBaseConf.set(TableInputFormat.INPUT_TABLE,"orders")
+    hBaseConf.set("hbase.zookeeper.quorum", ZOOKEEPER_QUORUM)
+    hBaseConf.set("hbase.zookeeper.property.clientPort", "2181")
 
     // 创建 spark context
     val sc = new SparkContext(sparkConf)
-    val sqlContext = new SQLContext(sc)
-    import sqlContext.implicits._
 
     // 从数据源获取数据
-    val hbaseRDD = sc.newAPIHadoopRDD(hBaseConf,classOf[TableInputFormat],classOf[ImmutableBytesWritable],classOf[Result])
-
+    val hbaseRDD:RDD[(ImmutableBytesWritable, Result)]=
+      sc.newAPIHadoopRDD(hBaseConf,classOf[TableInputFormat],classOf[ImmutableBytesWritable],classOf[Result])
+    print(hbaseRDD.count())
     // 将数据映射为表  也就是将 RDD转化为 dataframe schema
+    val spark=SparkSession.builder().config(sparkConf).getOrCreate()
+    import spark.implicits._
     val order = hbaseRDD.map(r=>(
-      Bytes.toString(r._2.getValue(Bytes.toBytes("id"),Bytes.toBytes("order"))),
+      Bytes.toString(r._2.getValue(Bytes.toBytes("id"),Bytes.toBytes("order_id"))),
       Bytes.toString(r._2.getValue(Bytes.toBytes("id"),Bytes.toBytes("dow")))
     )).toDF("order_id","order_dow")
     order.show()

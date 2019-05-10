@@ -25,7 +25,9 @@ object SparkHbaseTwo {
     jobConf.set(TableOutputFormat.OUTPUT_TABLE,"orders2")
 
     val sparkConf=new SparkConf().setAppName("SparkHbaseTwo")
-    val spark = SparkSession.builder().appName("spark to hbase").enableHiveSupport().getOrCreate()
+    val spark = SparkSession.builder().appName("spark to hbase")
+      .master("local[*]").config("hive.metastore.uris", "thrift://master:9083")
+      .enableHiveSupport().getOrCreate()
 
     val rdd=spark.sql("select order_id,user_id,order_dow from badou.orders limit 300").rdd
     rdd.map(row=>{
@@ -43,6 +45,6 @@ object SparkHbaseTwo {
       put.addImmutable(family, ordercol, Bytes.toBytes(order_id))
       put.addImmutable(family,dowcol, Bytes.toBytes(order_dow))
       (new ImmutableBytesWritable,put)
-    }).saveAsNewAPIHadoopDataset(jobConf)
+    }).saveAsHadoopDataset(jobConf)
   }
 }

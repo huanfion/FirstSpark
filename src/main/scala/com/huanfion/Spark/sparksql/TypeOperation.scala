@@ -16,7 +16,7 @@ object TypeOperation {
     //    filter(spark)
 //    mapAndFlatMap(spark)
 //    joinWith(spark)
-    sample(spark)
+    //sample(spark)
   }
 
   /**

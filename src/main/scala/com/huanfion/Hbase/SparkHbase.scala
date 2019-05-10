@@ -1,5 +1,7 @@
 package com.huanfion.Hbase
 
+import java.util
+
 import org.apache.hadoop.hbase.{HBaseConfiguration, TableName}
 import org.apache.hadoop.hbase.client.{ConnectionFactory, HTable, Put, Table}
 import org.apache.hadoop.hbase.mapred.TableOutputFormat
@@ -9,56 +11,50 @@ import org.apache.spark.sql.SparkSession
 
 /*
 * Put(List) Hbase
+* Spark 写入数据到HBase
 * */
 object SparkHbase {
   //从hive取数据DataFrame-》RDD写入hbase，道理和从flume中取一样，因为hive取出来的DataFrame转成rdd了。
   def main(args: Array[String]): Unit = {
-    // HBase zookeeper
-    val ZOOK_HOSTIP = Array("128", "130", "132").map("192.168.106." + _)
-    val ZOOKEEPER_QUORUM = ZOOK_HOSTIP.map(_ + ":2181").mkString(",")
-
+    //设置zookeeper 集群
+    import scala.collection.JavaConverters._
+    val ZOOKEEPER_IP = List("128", "130", "132").map("192.168.106." + _)
+    val ZOOKEEPER_QUORUM = ZOOKEEPER_IP.map(_ + ":2181").mkString(",")
     //    print(ZOOKEEPER_QUORUM)
-
-    val spark = SparkSession.builder().appName("spark to hbase").enableHiveSupport().getOrCreate()
+    //构建SparkSession实例
+    val spark = SparkSession.builder()
+      .master("local[*]").config("hive.metastore.uris", "thrift://master:9083")
+      .appName("SparkPutHbase").enableHiveSupport().getOrCreate()
     try {
-      val rdd = spark.sql("select order_id,user_id,order_dow from badou.orders limit 300").rdd
+      val orderRDD = spark.sql("select user_id,order_id,order_dow from badou.orders limit 300").rdd
 
-      rdd.map { row =>
-        val order_id = row(0).asInstanceOf[String]
-        val user_id = row(1).asInstanceOf[String]
-        val order_dow = row(2).asInstanceOf[String]
-
-        /**
-          * 一个put对象就是一行记录，在构造方法中指定主键user_id
-          * 所有的插入数据必须用org.apache.hadoop.hbase.util.Bytes.toBytes方法转换
-          */
+      orderRDD.map(x => {
+        val user_id = x(0).toString
+        val order_id = x(1).toString
+        val dow = x(2).toString
         val put = new Put(Bytes.toBytes(user_id))
-        put.addImmutable(Bytes.toBytes("id"), Bytes.toBytes("order"), Bytes.toBytes(order_id))
-        put.addImmutable(Bytes.toBytes("id"), Bytes.toBytes("dow"), Bytes.toBytes(order_dow))
+        put.addColumn(Bytes.toBytes("id"), Bytes.toBytes("order_id"), Bytes.toBytes(order_id))
+        put.addColumn(Bytes.toBytes("id"), Bytes.toBytes("dow"), Bytes.toBytes(dow))
         put
-      }.foreachPartition {partition =>
-        //初始化jobconf，TableOutputFormat必须是org.apache.hadoop.hbase.mapred包下的！
-        val table = createTable(ZOOKEEPER_QUORUM)
-        //HTable方法被弃用了
-        //val table=new HTable(jobConf,TableName.valueOf("orders"))
-        import scala.collection.JavaConversions._
-        table.put(seqAsJavaList(partition.toSeq))
-        table.close()
-      }
+      })
+        .foreachPartition(partition => {
+          val hbaseconf = HBaseConfiguration.create()
+          hbaseconf.set("hbase.zookeeper.quorum", ZOOKEEPER_QUORUM)
+          hbaseconf.set("hbase.zookeeper.property.clientPort", "2181")
+          val conn = ConnectionFactory.createConnection(hbaseconf)
+          //获取Table
+          val table = conn.getTable(TableName.valueOf("orders"))
+          //注意，实际使用中partition数据量可能过多，可能会导致内存溢出或者put执行假死情况
+          //建议取一定数据量的数据就put一次，比如1w条put一次。
+          import scala.collection.JavaConversions._
+          table.put(seqAsJavaList(partition.toSeq))
+          table.close()
+          conn.close()
+        })
     }
-    finally {
-      spark.stop()
+    catch {
+      case e: Exception => println(e.getMessage)
     }
-
-  }
-
-  def createTable(ZOOKEEPER_QUORUM: String): Table = {
-    val jobConf = new JobConf(HBaseConfiguration.create())
-    jobConf.set("hbase.zookeeper.quorum", ZOOKEEPER_QUORUM)
-    jobConf.set("hbase.zookeeper.property.clientPort", "2181")
-    jobConf.setOutputFormat(classOf[TableOutputFormat])
-    //HTable
-    val conn = ConnectionFactory.createConnection(jobConf)
-    conn.getTable(TableName.valueOf("orders"))
+    spark.stop()
   }
 }

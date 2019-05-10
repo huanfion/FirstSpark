@@ -18,7 +18,9 @@ object SparkHbaseThree {
     val ZOOKEEPER_QUORUM = ZOOK_HOSTIP.map(_ + ":2181").mkString(",")
 
     val sparkConf=new SparkConf().setAppName("SparkHbaseThree")
-    val spark = SparkSession.builder().appName("spark to hbase").enableHiveSupport().getOrCreate()
+    val spark = SparkSession.builder().appName("spark to hbase")
+      .master("local[*]").config("hive.metastore.uris", "thrift://master:9083")
+      .enableHiveSupport().getOrCreate()
     val sc=spark.sparkContext;
 
     sc.hadoopConfiguration.set("hbase.zookeeper.quorum", ZOOKEEPER_QUORUM)
@@ -26,7 +28,7 @@ object SparkHbaseThree {
     sc.hadoopConfiguration.set(TableOutputFormat.OUTPUT_TABLE,"orders3")
     //IMPORTANT: must set the attribute to solve the problem (can't create path from null string
     //这个地址还必须是不存在的，否则报错Output directory /tmp already exists
-    //sc.hadoopConfiguration.set("mapreduce.output.fileoutputformat.outputdir","/tmp/SparkHbaseThree")
+    sc.hadoopConfiguration.set("mapreduce.output.fileoutputformat.outputdir","/tmp/SparkHbaseThree")
 
     val job=Job.getInstance(sc.hadoopConfiguration)
     job.setOutputFormatClass(classOf[TableOutputFormat[ImmutableBytesWritable]])

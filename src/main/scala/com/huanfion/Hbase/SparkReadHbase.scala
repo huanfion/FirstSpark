@@ -12,7 +12,9 @@ object SparkReadHbase {
     val ZOOKEEPER_HOSTIP = Array("128", "130", "132").map("192.168.106." + _)
     val ZOOKEEPER_QUORUM = ZOOKEEPER_HOSTIP.map(_ + ":2181").mkString(",")
 
-    val spark = SparkSession.builder().appName("ReadHbase").enableHiveSupport().getOrCreate()
+    val spark = SparkSession.builder().appName("ReadHbase")
+      .master("local[*]")
+      .enableHiveSupport().getOrCreate()
 
     val hbaseConf = HBaseConfiguration.create()
     //设置zooKeeper集群地址，也可以通过将hbase-site.xml导入classpath，但是建议在程序里这样设置
@@ -34,12 +36,14 @@ object SparkReadHbase {
     val count = hbaseRDD.count()
     print("hbaseRDD.count:" + count)
 
-    hbaseRDD.foreach { case (_, result) => {
-      val key = Bytes.toString(result.getRow)
-      val order_id = Bytes.toString(result.getValue("id".getBytes(), "order".getBytes()))
-      val dow = Bytes.toString(result.getValue("id".getBytes(), "dow".getBytes()))
-      println("RowKey:" + key + "orderid:" + order_id + "order_dow:" + dow)
+    hbaseRDD.foreach {
+      case (_, result) => {
+        val key = Bytes.toString(result.getRow)
+        val order_id = Bytes.toString(result.getValue("id".getBytes(), "order_id".getBytes()))
+        val dow = Bytes.toString(result.getValue("id".getBytes(), "dow".getBytes()))
+        println("RowKey:" + key + "orderid:" + order_id + "order_dow:" + dow)
+      }
     }
-    }
+    spark.stop()
   }
 }
