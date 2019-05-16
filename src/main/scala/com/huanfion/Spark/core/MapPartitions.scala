@@ -40,7 +40,8 @@ object MapPartitions {
     val maprdd = rdd.map(funPerElement)
     maprdd.collect()
     val mapPartitionrdd = rdd.mapPartitions(funPerPartition)
-    mapPartitionrdd.collect()
+    mapPartitionrdd.collect().foreach(x => println(x))
     sc.stop()
   }
+
 }

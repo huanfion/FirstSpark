@@ -10,8 +10,10 @@ object ParquetScala {
     val spark = SparkSession.builder().appName("ParquetScala").master("local[*]")
       .config("spark.sql.warehourse.dir", "file:///D:/Work/BigData/FirstSpark/spark-warehouse")
       .getOrCreate()
-    basicLoad(spark)
+    //basicLoad(spark)
 //    merge(spark)
+val rdd2=spark.sparkContext.makeRDD(List((1,List(1,2,3)),(2,List(4,5,6))))
+    spark.sparkContext.makeRDD(List((1,List(1,2,3)),(2,List(4,5,6))))
   }
 
   def basicLoad(spark:SparkSession)={

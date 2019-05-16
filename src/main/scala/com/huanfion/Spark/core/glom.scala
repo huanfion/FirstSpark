@@ -2,10 +2,10 @@ package com.huanfion.Spark.core
 
 import org.apache.spark.{SparkConf, SparkContext}
 
-/**
-  * Union的使用
+/** *
+  * 将每一个分区形成一个数组，形成新的RDD类型时RDD[Array[T]]
   */
-object Unionscala {
+object glom {
   def getsc(): SparkContext = {
     val sparkconf = new SparkConf().setMaster("local[*]").setAppName("MapPartitions")
     val sc = new SparkContext(sparkconf)
@@ -14,10 +14,10 @@ object Unionscala {
 
   def main(args: Array[String]): Unit = {
     val sc=getsc()
-    val rdd1=sc.parallelize(Array("cherry","herry","leo"))
-    var rdd2=sc.parallelize(Array("leo","ben","lili"))
-
-    val unionrdd=rdd1.union(rdd2)
-    unionrdd.foreach(x=>println(x))
+    var rdd=sc.makeRDD(1 to 10 ,2)
+    var glomrdd=rdd.glom()
+    glomrdd.foreach(x=>{
+      for(e<-x) print(e +" ")
+    })
   }
 }

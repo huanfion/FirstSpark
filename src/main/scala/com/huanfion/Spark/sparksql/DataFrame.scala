@@ -21,8 +21,8 @@ object DataFrame {
     //val df = spark.read.json(path)
     df.show()
     df.printSchema()
-    //import org.apache.spark.sql.functions._
-    //df.select(col("name")).show()
+    import org.apache.spark.sql.functions._
+    df.select(col("name")).show()
     df.select($"name", $"age" + 1).show()
 
     df.createOrReplaceTempView("people")
