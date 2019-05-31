@@ -22,17 +22,17 @@ object HelloWorld {
     //      .enableHiveSupport().getOrCreate()
     //
     //    val sc = new SparkContext(conf)
-    val nums = Array(3,2,4)
-    twoSum(nums, 6).foreach(print(_))
-  }
+    //    val nums = Array(3,2,4)
+    //    twoSum(nums, 6).foreach(print(_))
 
+  }
   def twoSum(nums: Array[Int], target: Int): Array[Int] = {
-    var cache=scala.collection.immutable.Map[Int,Int]()
+    var cache = scala.collection.immutable.Map[Int, Int]()
     for (i: Int <- range(0, nums.length)) {
-      if(cache.contains(target-nums(i))){
-        return Array(cache(target-nums(i)),i)
-      }else{
-        cache += (nums(i)->i)
+      if (cache.contains(target - nums(i))) {
+        return Array(cache(target - nums(i)), i)
+      } else {
+        cache += (nums(i) -> i)
       }
     }
     Array(0, 0)

@@ -9,17 +9,24 @@
       </compiler-classpath>
     </properties>
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/scala-actors-2.11.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/scala-actors-migration_2.11-1.1.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/scala-library.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/scala-parser-combinators_2.11-1.0.4.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/scala-reflect.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/scala-swing_2.11-1.0.2.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/scala-xml_2.11-1.0.4.jar!/" />
+      <root url="jar://D:/Program Files/scala-2.11.8/lib/scala-actors-2.11.0.jar!/" />
+      <root url="jar://D:/Program Files/scala-2.11.8/lib/scala-actors-migration_2.11-1.1.0.jar!/" />
+      <root url="jar://D:/Program Files/scala-2.11.8/lib/scala-library.jar!/" />
+      <root url="jar://D:/Program Files/scala-2.11.8/lib/scala-parser-combinators_2.11-1.0.4.jar!/" />
+      <root url="jar://D:/Program Files/scala-2.11.8/lib/scala-reflect.jar!/" />
+      <root url="jar://D:/Program Files/scala-2.11.8/lib/scala-swing_2.11-1.0.2.jar!/" />
+      <root url="jar://D:/Program Files/scala-2.11.8/lib/scala-xml_2.11-1.0.4.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="http://www.scala-lang.org/api/2.11.8/" />
     </JAVADOC>
-    <SOURCES />
+    <SOURCES>
+      <root url="file://D:/Program Files/scala-2.11.8/scala-2.11.8/src/actors" />
+      <root url="file://D:/Program Files/scala-2.11.8/scala-2.11.8/src/forkjoin" />
+      <root url="file://D:/Program Files/scala-2.11.8/scala-2.11.8/src/library" />
+      <root url="file://D:/Program Files/scala-2.11.8/scala-2.11.8/src/partest-extras" />
+      <root url="file://D:/Program Files/scala-2.11.8/scala-2.11.8/src/partest-javaagent" />
+      <root url="file://D:/Program Files/scala-2.11.8/scala-2.11.8/src/repl" />
+    </SOURCES>
   </library>
 </component>

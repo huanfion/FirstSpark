@@ -28,6 +28,7 @@ object broadcast {
     val rdd = sc.parallelize(list)
     val values = rdd.map(_ * broadvalue.value)
     values.foreach(println(_))
+    println(rdd.partitions.size)
     println(s"-"*20)
     /**
       * 在driver端可以修改广播变量的值，在executor端无法修改广播变量的值
