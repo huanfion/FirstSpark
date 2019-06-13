@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.huanfion</groupId>
-  <artifactId>com.huanfion</artifactId>
+  <artifactId>FirstSpark</artifactId>
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <inceptionYear>2008</inceptionYear>
   <modules>
-    <module>HuanProject</module>
+      <module>Commerce_Basic</module>
   </modules>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,11 +80,11 @@
       <artifactId>spark-mllib_${scala.version}</artifactId>
       <version>${spark.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.hive</groupId>
-      <artifactId>hive-exec</artifactId>
-      <version>${hive.version}</version>
-    </dependency>
+    <!--<dependency>-->
+      <!--<groupId>org.apache.hive</groupId>-->
+      <!--<artifactId>hive-exec</artifactId>-->
+      <!--<version>${hive.version}</version>-->
+    <!--</dependency>-->
     <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-streaming-kafka-0-8_${scala.version}</artifactId>

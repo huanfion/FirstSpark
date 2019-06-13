@@ -1,0 +1,25 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>FirstSpark</artifactId>
+        <groupId>com.huanfion</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>Commerce_Basic</artifactId>
+    <packaging>pom</packaging>
+    <inceptionYear>2008</inceptionYear>
+    <modules>
+        <module>mock</module>
+        <module>commons</module>
+        <module>session</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.huanfion</groupId>
+            <artifactId>com.huanfion</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+</project>

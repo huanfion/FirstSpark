@@ -24,7 +24,7 @@ object HelloWorld {
     //    val sc = new SparkContext(conf)
     //    val nums = Array(3,2,4)
     //    twoSum(nums, 6).foreach(print(_))
-
+    println(s"say hello")
   }
   def twoSum(nums: Array[Int], target: Int): Array[Int] = {
     var cache = scala.collection.immutable.Map[Int, Int]()
